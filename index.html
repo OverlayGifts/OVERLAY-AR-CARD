@@ -1,0 +1,180 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    <style>
+      #playPauseButtonContainer {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        text-align: center;
+        z-index: 999;
+      }
+
+      #playPauseButton {
+        width: 50px;
+        height: 50px;
+        background: url('https://cdn-icons-png.flaticon.com/512/109/109197.png') no-repeat center center;
+        background-size: contain;
+        border: 2px solid #ffffff;
+        border-radius: 30%;
+        cursor: pointer;
+        outline: none;
+      }
+
+      #playPauseButton:hover {
+        background-color: rgba(0, 0, 0, 0.3);
+      }
+
+      #playPauseText {
+        margin-top: 5px;
+        font-size: 14px;
+        color: #ffffff;
+      }
+
+      #customButton {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        background-color: gold;
+        color: black;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        z-index: 1000;
+      }
+
+      #customButton:hover {
+        text-decoration: underline;
+      }
+
+      /* Hide the VR button */
+      .a-enter-vr-button {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <a-scene
+      mindar-image="imageTargetSrc: ./targets.mind"
+      color-space="sRGB"
+      renderer="colorManagement: true, physicallyCorrectLights"
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: false">
+
+      <a-assets>
+        <video id="video" src="./vid2.mp4" playsinline muted loop></video>
+      </a-assets>
+
+      <a-camera position="0 0 0" look-controls="enabled: true" cursor="rayOrigin: mouse"></a-camera>
+
+      <a-entity id="target" mindar-image-target="targetIndex: 0">
+        <!-- Adjust width and height based on video aspect ratio -->
+        <a-plane
+          material="src: #video"
+          position="0 0 0"
+          height="0.58"
+          width="1.6">
+        </a-plane>
+
+        <!-- Social Media Icons Positioned Below the Video -->
+        <a-entity position="0 -1 0">
+          <a-image src="https://cdn-icons-png.flaticon.com/512/174/174857.png" 
+                   position="-0.7 0 0" 
+                   width="0.3" 
+                   height="0.3"
+                   class="social-media-button"
+                   id="linkedin"
+                   cursor-listener></a-image>
+
+          <a-image src="https://cdn-icons-png.flaticon.com/512/174/174855.png" 
+                   position="0 0 0" 
+                   width="0.3" 
+                   height="0.3"
+                   class="social-media-button"
+                   id="instagram"
+                   cursor-listener></a-image>
+
+          <a-image src="https://cdn-icons-png.flaticon.com/512/138/138533.png" 
+                   position="0.7 0 0" 
+                   width="0.3" 
+                   height="0.3"
+                   class="social-media-button"
+                   id="youtube"
+                   cursor-listener></a-image>
+        </a-entity>
+      </a-entity>
+    </a-scene>
+
+    <div id="playPauseButtonContainer">
+      <button id="playPauseButton"></button>
+      <div id="playPauseText">Play with Sound</div>
+    </div>
+
+    <!-- Custom Transparent Button -->
+    <button id="customButton" onclick="window.location.href='https://www.overlay-ai.com';">WEBSITE</button>
+
+    <script>
+      const video = document.querySelector('#video');
+      const button = document.querySelector('#playPauseButton');
+      const buttonText = document.querySelector('#playPauseText');
+
+      // Video is initially paused and muted
+      video.pause();
+      video.muted = true;
+
+      button.addEventListener('click', function() {
+        if (video.paused) {
+          video.muted = false;  // Unmute the video
+          video.play();  // Play the video
+          button.style.backgroundImage = "url('https://cdn-icons-png.flaticon.com/512/109/109197.png')";
+          buttonText.textContent = 'Pause';
+        } else {
+          video.pause();  // Pause the video
+          buttonText.textContent = 'Play with Sound';
+        }
+      });
+
+      const target = document.querySelector('#target');
+      target.addEventListener('mindar-image-target-visible', () => {
+        if (!video.muted) {
+          video.play();
+          buttonText.textContent = 'Pause';
+        }
+      });
+      target.addEventListener('mindar-image-target-invisible', () => {
+        video.pause();
+        buttonText.textContent = 'Play with Sound';
+      });
+
+      // Add event listeners for social media buttons
+      document.querySelector('#linkedin').addEventListener('click', function() {
+        window.open('https://www.linkedin.com', '_blank');
+      });
+
+      document.querySelector('#instagram').addEventListener('click', function() {
+        window.open('https://www.instagram.com', '_blank');
+      });
+
+      document.querySelector('#youtube').addEventListener('click', function() {
+        window.open('https://www.youtube.com', '_blank');
+      });
+
+      // Cursor listener component
+      AFRAME.registerComponent('cursor-listener', {
+        init: function () {
+          this.el.addEventListener('click', () => {
+            if (this.el.id === 'linkedin') {
+              window.open('https://www.linkedin.com', '_blank');
+            } else if (this.el.id === 'instagram') {
+              window.open('https://www.instagram.com', '_blank');
+            } else if (this.el.id === 'youtube') {
+              window.open('https://www.youtube.com', '_blank');
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
