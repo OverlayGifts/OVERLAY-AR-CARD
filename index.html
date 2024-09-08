@@ -67,43 +67,19 @@
         <video id="video" src="./vid2.mp4" playsinline muted loop></video>
       </a-assets>
 
-      <a-camera position="0 0 0" look-controls="enabled: true" cursor="rayOrigin: mouse"></a-camera>
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity id="target" mindar-image-target="targetIndex: 0">
         <!-- Adjust width and height based on video aspect ratio -->
         <a-plane
           material="src: #video"
           position="0 0 0"
-          height="0.58"
-          width="1.6">
+          height="0.58"   <!-- Set height to fit the video -->
+          <width="1.6" />    <!-- Set width to maintain aspect ratio -->
+          <rotation="0 0 0" />
+          <scale="1 1 1" />
+          
         </a-plane>
-
-        <!-- Social Media Icons Positioned Below the Video -->
-        <a-entity position="0 -1 0">
-          <a-image src="https://cdn-icons-png.flaticon.com/512/174/174857.png" 
-                   position="-0.7 0 0" 
-                   width="0.3" 
-                   height="0.3"
-                   class="social-media-button"
-                   id="linkedin"
-                   cursor-listener></a-image>
-
-          <a-image src="https://cdn-icons-png.flaticon.com/512/174/174855.png" 
-                   position="0 0 0" 
-                   width="0.3" 
-                   height="0.3"
-                   class="social-media-button"
-                   id="instagram"
-                   cursor-listener></a-image>
-
-          <a-image src="https://cdn-icons-png.flaticon.com/512/138/138533.png" 
-                   position="0.7 0 0" 
-                   width="0.3" 
-                   height="0.3"
-                   class="social-media-button"
-                   id="youtube"
-                   cursor-listener></a-image>
-        </a-entity>
       </a-entity>
     </a-scene>
 
@@ -146,34 +122,6 @@
       target.addEventListener('mindar-image-target-invisible', () => {
         video.pause();
         buttonText.textContent = 'Play with Sound';
-      });
-
-      // Add event listeners for social media buttons
-      document.querySelector('#linkedin').addEventListener('click', function() {
-        window.open('https://www.linkedin.com', '_blank');
-      });
-
-      document.querySelector('#instagram').addEventListener('click', function() {
-        window.open('https://www.instagram.com', '_blank');
-      });
-
-      document.querySelector('#youtube').addEventListener('click', function() {
-        window.open('https://www.youtube.com', '_blank');
-      });
-
-      // Cursor listener component
-      AFRAME.registerComponent('cursor-listener', {
-        init: function () {
-          this.el.addEventListener('click', () => {
-            if (this.el.id === 'linkedin') {
-              window.open('https://www.linkedin.com', '_blank');
-            } else if (this.el.id === 'instagram') {
-              window.open('https://www.instagram.com', '_blank');
-            } else if (this.el.id === 'youtube') {
-              window.open('https://www.youtube.com', '_blank');
-            }
-          });
-        }
       });
     </script>
   </body>
